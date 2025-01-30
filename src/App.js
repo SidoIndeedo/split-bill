@@ -22,15 +22,22 @@ const initialFriends = [
 ];
 
 export default function App() {
+  const [friends, setFriends] = useState(initialFriends);
   const [showAddFriend, setShowFriend] = useState(false);
+
   function toogleShowAddFriend() {
     setShowFriend((show) => !show);
+  }
+
+  function handleAddFriend(friend) {
+    setFriends((friends) => [...friends, friend]);
+    setShowFriend((e) => !e);
   }
   return (
     <div className="app">
       <div className="sidebar">
-        <FriendsList />
-        {showAddFriend && <FormAddFriend />}
+        <FriendsList friends={friends} />
+        {showAddFriend && <FormAddFriend onAddFriend={handleAddFriend} />}
         <Button onClick={toogleShowAddFriend}>
           {showAddFriend ? "Close" : "Add Friend"}
         </Button>
@@ -48,9 +55,7 @@ function Button({ children, onClick }) {
   );
 }
 
-function FriendsList() {
-  const friends = initialFriends;
-
+function FriendsList({ friends }) {
   return (
     <ul>
       {friends.map((friend) => (
@@ -83,14 +88,45 @@ function Friend({ friend }) {
   );
 }
 
-function FormAddFriend() {
+function FormAddFriend({ onAddFriend }) {
+  const [newFriend, setNewFriend] = useState("");
+  const [image, setNewImg] = useState("https://i.pravatar.cc/48?u=499476");
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!newFriend || !image) return;
+
+    const id = crypto.randomUUID();
+    const newF = {
+      id,
+      newFriend,
+      image: `${image}?=${id}`, //this appends the id into the newImg string
+      balance: 0,
+    };
+    // console.log(newF);
+
+    setNewFriend("");
+    setNewImg("https://i.pravatar.cc/48?u=499476");
+
+    onAddFriend(newF);
+  }
+
   return (
-    <form className="form-add-friend">
-      <label>🧑‍🤝‍🧑 Friend name</label>
-      <input type="text" />
+    <form className="form-add-friend" onSubmit={handleSubmit}>
+      <label>🧑‍🤝‍🧑Friend name </label>
+      <input
+        type="text"
+        value={newFriend}
+        onChange={(e) => setNewFriend(e.target.value)}
+      />
 
       <label>🌅Image URL</label>
-      <input type="text" />
+      <input
+        type="text"
+        value={image}
+        onChange={(e) => setNewImg(e.target.value)}
+      />
       <Button>Add</Button>
     </form>
   );
