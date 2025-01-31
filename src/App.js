@@ -42,10 +42,11 @@ export default function App() {
 
   function handleBillSplit(value) {
     setFriends((friends) =>
-      friends.map((friend) =>
-        friend.id === selectedF.id
-          ? { ...friend, balance: friend.balance + value }
-          : friend
+      friends.map(
+        (friend) =>
+          friend.id === selectedF.id
+            ? { ...friend, balance: friend.balance + value }
+            : friend //haaaaaaaaaaaaaaa i had a stroke understanding this function
       )
     );
     setSelectedF(null);
