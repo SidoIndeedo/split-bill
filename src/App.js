@@ -66,7 +66,12 @@ export default function App() {
         </Button>
       </div>
       {selectedF && (
-        <FormSplitBill selectedF={selectedF} onSplitBill={handleBillSplit} />
+        <FormSplitBill
+          selectedF={selectedF}
+          onSplitBill={handleBillSplit}
+          key={selectedF.id}
+          //updated stuff, writing this idk why but it will add to the git add .
+        />
       )}
     </div>
   );
